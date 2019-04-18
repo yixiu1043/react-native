@@ -1,0 +1,79 @@
+matrix:
+  include:
+  - os: osx
+    language: objective-c
+    sudo: false
+    osx_image: xcode9
+    env: TEST_TYPE=ios
+  - os: linux
+    language: android
+    sudo: required
+    jdk: oraclejdk8
+    env: TEST_TYPE=android
+    android:
+      components:
+      - tools
+      - tools
+      # The BuildTools version used by your project
+      - build-tools-26.0.1
+      - build-tools-25.0.3
+      - build-tools-25.0.2
+      - build-tools-23.0.1
+      # The SDK version used to compile your project
+      - android-26
+      - android-25
+      - android-23
+      - extra-android-m2repository
+      - extra-android-support
+  - os: osx
+    language: node_js
+    sudo: false
+    node_js: 6
+    env: TEST_TYPE=js
+env:
+  global:
+  - PROJECT_MOBILE=reading
+addons:
+  code_climate:
+    repo_token: $CODE_CLIMATE_TOKEN
+before_cache:
+- rm -f android/.gradle/caches/modules-2/modules-2.lock
+- rm -fr android/.gradle/caches/*/plugin-resolution/
+cache:
+  yarn: true
+  directories:
+  - node_modules
+  - android/.gradle/caches
+  - android/.gradle/wrapper
+before_install:
+- if [[ $TRAVIS_PULL_REQUEST == 'false' ]]; then openssl aes-256-cbc -K $encrypted_549897007358_key -iv $encrypted_549897007358_iv
+  -in .travis/secrets.tar.enc -out secrets.tar -d ; fi
+- if [[ $TRAVIS_PULL_REQUEST == 'false' ]]; then tar xvf secrets.tar ; fi
+- if [[ $TEST_TYPE == 'android' ]] && [[ $TRAVIS_PULL_REQUEST == 'false' ]]; then mv gradle.properties android ; fi
+- if [[ $TEST_TYPE == 'android' ]] && [[ $TRAVIS_PULL_REQUEST == 'false' ]]; then mv reading.keystore android/app ; fi
+- if [[ $TEST_TYPE != 'js' ]]; then curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.6/install.sh | bash ; fi
+- if [[ $TEST_TYPE != 'js' ]]; then source ~/.bashrc ; fi
+- if [[ $TEST_TYPE != 'js' ]]; then nvm install 6 ; fi
+- if [[ $TEST_TYPE != 'js' ]]; then curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.3.2 ; fi
+- if [[ $TEST_TYPE != 'js' ]]; then export PATH=$HOME/.yarn/bin:$PATH ; fi
+install:
+- if [[ $TEST_TYPE == 'android' ]] && [[ $TRAVIS_PULL_REQUEST == 'false' ]]; then gem install fir-cli ; fi
+- rm -Rf "${TMPDIR}/jest_preprocess_cache"
+- yarn config set spin=false
+- yarn config set progress=false
+- travis_wait yarn install
+branches:
+  only:
+  - master
+script:
+- if [[ $TEST_TYPE == 'js' ]]; then yarn lint ; fi
+- if [[ $TEST_TYPE == 'js' ]]; then yarn test ; fi
+- if [[ $TEST_TYPE == 'ios' ]]; then xcodebuild -project ios/$PROJECT_MOBILE.xcodeproj
+  -scheme $PROJECT_MOBILE -sdk iphonesimulator11.0 -configuration Debug CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO clean build ; fi
+- if [ $TEST_TYPE == 'android' ] && [ $TRAVIS_PULL_REQUEST == 'false' ]; then cd android && ./gradlew clean && ./gradlew resguardRelease --stacktrace ; fi
+- if [ $TEST_TYPE == 'android' ] && [ $TRAVIS_PULL_REQUEST != 'false' ]; then cd android && ./gradlew clean && ./gradlew assembleDebug --stacktrace ; fi
+after_success:
+- if [ $TEST_TYPE == 'android' ] && [ $TRAVIS_PULL_REQUEST == 'false' ]; then fir p 
+  $HOME/build/attentiveness/reading/android/app/build/outputs/apk/AndResGuard_app-armeabi-v7a-release/app-armeabi-v7a-release_aligned_signed.apk
+  -T $FIR_TOKEN -c "$TRAVIS_TAG" ; fi
+  
