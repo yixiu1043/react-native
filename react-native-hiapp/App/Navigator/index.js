@@ -1,74 +1,81 @@
-import React from 'react'
-import config from '@Config'
-import t from '@Localize'
-import { Text } from 'react-native'
-import { createStackNavigator, createBottomTabNavigator, createAppContainer } from 'react-navigation'
+import React from 'react';
+import config from '@Config';
+import t from '@Localize';
+import { Text } from 'react-native';
+import { createStackNavigator, createBottomTabNavigator, createAppContainer } from 'react-navigation';
 
-import Icon from '@Components/Icon'
-import HomeScreen from '@Views/Home'
-import ContactsScreen from '@Views/Contacts'
-import SettingsScreen from '@Views/Settings'
-import AboutScreen from '@Views/About'
-import ProfileScreen from '@Views/Profile'
-import LanguageScreen from '@Views/Language'
-import FeedbackScreen from '@Views/Feedback'
-import MessageScreen from '@Views/Message'
+import Icon from '@Components/Icon';
+import HomeScreen from '@Views/Home';
+import ContactsScreen from '@Views/Contacts';
+import SettingsScreen from '@Views/Settings';
+import AboutScreen from '@Views/About';
+import ProfileScreen from '@Views/Profile';
+import LanguageScreen from '@Views/Language';
+import FeedbackScreen from '@Views/Feedback';
+import MessageScreen from '@Views/Message';
+import LoginScreen from '@Views/User/login';
+import RegisterScreen from '@Views/User/register';
+import ChatroomScreen from '@Views/Chatroom';
 
 const HomeStack = createStackNavigator({
-  Home: { screen: HomeScreen, }
-})
+  Home: { screen: HomeScreen },
+});
 const ContactsStack = createStackNavigator({
-  Contacts: { screen: ContactsScreen }
-})
+  Contacts: { screen: ContactsScreen },
+});
 const SettingsStack = createStackNavigator({
   Settings: { screen: SettingsScreen },
-})
+});
 
 const TabNavigator = createBottomTabNavigator(
   {
     Home: { screen: HomeStack },
     Contacts: { screen: ContactsStack },
-    Settings: { screen: SettingsStack }
+    Settings: { screen: SettingsStack },
   },
   {
     navigationOptions: () => ({
-      header: null
+      header: null,
     }),
     defaultNavigationOptions: ({ navigation }) => ({
       tabBarLabel: ({ focused, tintColor }) => {
-        const { routeName } = navigation.state
+        const { routeName } = navigation.state;
         switch (routeName) {
           case 'Home':
-            return <Text style={{ color: tintColor, fontSize: 12 }}>{t('global.home')}</Text>
+            return <Text style={{ color: tintColor, fontSize: 12 }}>{t('global.home')}</Text>;
           case 'Contacts':
-            return <Text style={{ color: tintColor, fontSize: 12 }}>{t('global.contacts')}</Text>
+            return <Text style={{ color: tintColor, fontSize: 12 }}>{t('global.message')}</Text>;
           case 'Settings':
-            return <Text style={{ color: tintColor, fontSize: 12 }}>{t('global.settings')}</Text>
+            return <Text style={{ color: tintColor, fontSize: 12 }}>{t('global.settings')}</Text>;
+          default:
+            break;
         }
       },
       tabBarIcon: ({ focused, tintColor }) => {
-        const { routeName } = navigation.state
-        let iconName
+        const { routeName } = navigation.state;
+        let iconName;
         switch (routeName) {
           case 'Home':
-            iconName = `ios7home${focused ? '' : 'outline'}`
-            break
+            iconName = `ios7home${focused ? '' : 'outline'}`;
+            break;
           case 'Contacts':
-            iconName = `ios7chatbubble${focused ? '' : 'outline'}`
-            break
+            iconName = `ios7chatbubble${focused ? '' : 'outline'}`;
+            break;
           case 'Settings':
-            iconName = `ios7gear${focused ? '' : 'outline'}`
-            break
+            iconName = `ios7gear${focused ? '' : 'outline'}`;
+            break;
+          default:
+            break;
         }
-        return <Icon name={iconName} size={26} color={tintColor} />
+        return <Icon name={iconName} size={26} color={tintColor} />;
       },
     }),
     tabBarOptions: {
       activeTintColor: config.mainColor,
       inactiveTintColor: 'gray',
-    }
-  }
-)
+    },
+  },
+);
 
 const AppStack = createStackNavigator({
   Tabs: TabNavigator,
@@ -76,11 +83,14 @@ const AppStack = createStackNavigator({
   Profile: { screen: ProfileScreen },
   Language: { screen: LanguageScreen },
   Feedback: { screen: FeedbackScreen },
-  Message: { screen: MessageScreen }
+  Message: { screen: MessageScreen },
+  Login: { screen: LoginScreen },
+  Register: { screen: RegisterScreen },
+  Chatroom: { screen: ChatroomScreen },
 }, {
   defaultNavigationOptions: () => ({
-    ...config.defaultNavigation
-  })
-})
+    ...config.defaultNavigation,
+  }),
+});
 
-export default createAppContainer(AppStack)
+export default createAppContainer(AppStack);

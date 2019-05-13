@@ -1,7 +1,7 @@
 const Skin = {
   mainColor: '#ff9800',
-  viewsBackgroundColor: '#eef0f3'
-}
+  viewsBackgroundColor: '#eef0f3',
+};
 
 const App = {
   devBaseUrl: 'https://raw.githubusercontent.com/BelinChung/api-mock/master/HiApp',
@@ -10,11 +10,11 @@ const App = {
     headerStyle: {
       backgroundColor: Skin.mainColor,
     },
-    headerTintColor: '#fff'
-  }
-}
+    headerTintColor: '#fff',
+  },
+};
 
 export default {
   ...App,
-  ...Skin
-}
+  ...Skin,
+};

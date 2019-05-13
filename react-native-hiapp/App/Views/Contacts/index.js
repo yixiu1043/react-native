@@ -27,7 +27,7 @@ export default class HomeScreen extends React.Component {
   static navigationOptions = _ => {
     return {
       ...config.defaultNavigation,
-      title: t('global.contacts'),
+      title: t('global.message'),
     }
   }
 

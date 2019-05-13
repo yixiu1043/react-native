@@ -4,7 +4,7 @@ import t from '@Localize'
 import config from '@Config'
 import styles from '@Styles'
 import Icon from '@Components/Icon'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, TouchableOpacity, Text } from 'react-native'
 import { ListItem } from 'react-native-elements'
 import req from '@Network'
 
@@ -49,6 +49,9 @@ export default class HomeScreen extends React.Component {
       }
     ]
   }
+  goLogin = () => {
+    this.props.navigation.navigate('Login')
+  }
 
   render() {
     return (
@@ -84,6 +87,12 @@ export default class HomeScreen extends React.Component {
             </View>
           ))
         }
+        <TouchableOpacity
+          style={viewStyles.button}
+          onPress={this.goLogin}
+        >
+          <Text>登陆</Text>  
+        </TouchableOpacity>
       </View>
     )
   }
@@ -100,5 +109,13 @@ const viewStyles = StyleSheet.create({
   listItem: {
     paddingTop: 10,
     paddingBottom: 10
-  }
+  },
+  button: {
+    alignItems: 'center',
+    padding: 10,
+    backgroundColor: config.mainColor,
+    color: config.viewsBackgroundColor,
+    marginTop: 30,
+    marginHorizontal:10,
+  },
 })
