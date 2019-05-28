@@ -1,46 +1,23 @@
-// import { MessageBox } from 'mint-ui';
-// import Api from './api';
 // import store from '../store';
-// import { rongCloudApi } from '../config';
 import {
   start, joinChatRoom, sendPersonMessage, reconnect, disconnect,
-} from '../lib/rongCloud';
+} from '@libs/rongCloud';
 // import { showToast, showLoading, hideLoading } from './helper';
-// import UserStorage from '../storage/user';
-// import router from '@/router';
+
+const APPKEY = 'kj7swf8ok3m02';
 
 export default class ChatService {
   /**
-   * 融云服务启动函数
-   */
-  static rongCloudStart() {
-    showLoading();
-    const { user_id, avatar, nick_name } = UserStorage.getUserInfo();
-    Api.getRongCloudToken({
-      userId: user_id,
-      name: nick_name,
-      portraitUri: avatar,
-    }).then((res) => {
-      const { token, userId } = res;
-      store.commit('SET_RONGCLOUD_TOKEN', token);
-      this.connectRongCloud(token, userId);
-    });
-  }
-
-  /**
    * 链接融云服务
-   * @param {*} token
-   * @param {*} userId
    */
-  static connectRongCloud(token, userId) {
-    const { appKey } = rongCloudApi;
+  static rongCloudStart(token, userId) {
     start({
-      appKey,
+      appKey: APPKEY,
       token,
       userId,
       callbacks: {
         connectSuccess: () => {
-          store.commit('SET_RONGCLOUD_CONNECT', true);
+          // store.commit('SET_RONGCLOUD_CONNECT', true);
         },
         connectionStatusListener: (res) => {
           this.connectionStatusListener(res);
@@ -49,8 +26,8 @@ export default class ChatService {
           this.receiveNewMessage(message);
         },
         onError: (message) => {
-          hideLoading();
-          showToast(message);
+          // hideLoading();
+          // showToast(message);
         },
       },
     });
@@ -74,7 +51,7 @@ export default class ChatService {
       receivedTime: message.receivedTime,
       sentTime: message.sentTime,
     };
-    store.commit('GET_CLIENT_CHAT_LIST', chatDetails);
+    // store.commit('GET_CLIENT_CHAT_LIST', chatDetails);
   }
 
   /**
@@ -83,37 +60,27 @@ export default class ChatService {
    */
   static connectionStatusListener(res) {
     const { code, message } = res;
-    const { path } = router.currentRoute;
-    const showMsgBox = (title) => {
-      MessageBox.confirm(title)
-        .then((action) => {
-          if (action === 'confirm') {
-            showLoading('服务断开,正在重连');
-            this.reconnect();
-          }
-        });
-    };
 
     switch (code) {
       case 0:
-        hideLoading();
+        // hideLoading();
         break;
       case 2:
         if (path !== '/') {
-          showMsgBox('服务断开连接,是否重连？');
+          // showMsgBox('服务断开连接,是否重连？');
         }
         break;
       case 3:
-        showToast(message);
+        // showToast(message);
         break;
       case 4:
-        showMsgBox('未知原因,连接关闭,是否重连？');
+        // showMsgBox('未知原因,连接关闭,是否重连？');
         break;
       case 6:
-        showMsgBox('您在其他设备登录,是否重连？');
+        // showMsgBox('您在其他设备登录,是否重连？');
         break;
       case 12:
-        showToast(message);
+        // showToast(message);
         break;
 
       default:
@@ -126,15 +93,15 @@ export default class ChatService {
    * @param {*} chatRoomId
    */
   static joinChatRoom = async (chatRoomId) => {
-    showLoading('加载中,请稍后');
+    // showLoading('加载中,请稍后');
     await joinChatRoom({
       chatRoomId,
       success: () => {
-        hideLoading();
+        // hideLoading();
       },
       error: () => {
-        hideLoading();
-        showToast('拉取聊天室历史消息失败');
+        // hideLoading();
+        // showToast('拉取聊天室历史消息失败');
       },
     });
   }
@@ -168,7 +135,7 @@ export default class ChatService {
           receivedTime: message.receivedTime,
           sentTime: message.sentTime,
         };
-        store.commit('GET_CLIENT_CHAT_LIST', chatDetails);
+        // store.commit('GET_CLIENT_CHAT_LIST', chatDetails);
       },
       error: message => error(message),
     });
@@ -179,8 +146,8 @@ export default class ChatService {
    */
   static reconnect() {
     reconnect({
-      success: message => showToast(message),
-      error: message => showToast(message),
+      // success: message => showToast(message),
+      // error: message => showToast(message),
     });
   }
 

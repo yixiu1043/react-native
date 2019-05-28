@@ -5,6 +5,7 @@ import {
 import config from '@Config';
 import Storage from '@service/storage';
 import styles from '@Styles';
+import ChatService from '@service/chat';
 
 const viewStyles = StyleSheet.create({
   container: {
@@ -51,7 +52,7 @@ export default class login extends PureComponent {
     this.setState({ [name]: text });
   }
 
-  onPress = () => {
+  login = () => {
     const { username, password } = this.state;
     const { navigation } = this.props;
     fetch(`http://localhost:5050/user/token?userId=${username}&name=${password}`)
@@ -59,6 +60,8 @@ export default class login extends PureComponent {
       .then((res) => {
         const { token } = JSON.parse(res);
         Storage.set('token', token);
+        Storage.set('userId', username);
+        ChatService.rongCloudStart(token, username);
         navigation.navigate('Home');
       });
   }
@@ -77,11 +80,12 @@ export default class login extends PureComponent {
         <TextInput
           style={viewStyles.input}
           placeholder="密码"
+          secureTextEntry
           onChangeText={text => this.onChangeText('password', text)}
         />
         <TouchableOpacity
           style={viewStyles.button}
-          onPress={this.onPress}
+          onPress={this.login}
         >
           <Text>立即登陆</Text>
         </TouchableOpacity>

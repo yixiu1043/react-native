@@ -12,6 +12,7 @@ import {
   TouchableHighlight,
   StyleSheet,
 } from 'react-native';
+import ChatService from '@service/chat';
 
 const viewStyles = StyleSheet.create({
   container: {
@@ -84,6 +85,7 @@ class HomeScreen extends React.Component {
   goChatRoom = (id) => {
     const { navigation } = this.props;
     navigation.navigate('Chatroom');
+    ChatService.joinChatRoom(id);
   }
 
   openPublisher() {

@@ -18,6 +18,7 @@ module.exports = {
           '@Store': './App/Store',
           '@assets': './App/assets',
           '@service': './App/service',
+          '@libs': './App/libs',
         },
       },
     ],

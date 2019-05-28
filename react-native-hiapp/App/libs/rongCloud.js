@@ -1,8 +1,9 @@
-import './RongIMLib-2.4.0';
-
 /* eslint-disable no-undef */
+import RongIMLib from './RongIMLib-2.4.0.min';
+// import './RongIMLib-2.4.0.min';
+
+console.log(RongIMLib);
 const { RongIMClient } = RongIMLib;
-let instance = null;
 
 /**
  *连接状态监听器
@@ -13,57 +14,57 @@ export const setConnectionStatusListener = (callbacks) => {
     onChanged(status) {
       const data = {};
       switch (status) {
-      case RongIMLib.ConnectionStatus.CONNECTED:
-      case 0:
-        data.code = 0;
-        data.message = '连接成功';
-        console.log('rc连接成功');
-        if (callbacks.getInstance) {
-          callbacks.getInstance(instance);
-        }
-        break;
-      case RongIMLib.ConnectionStatus.CONNECTING:
-      case 1:
-        console.log('连接中');
-        data.code = 1;
-        data.message = '连接中';
-        break;
+        case RongIMLib.ConnectionStatus.CONNECTED:
+        case 0:
+          data.code = 0;
+          data.message = '连接成功';
+          console.log('rc连接成功');
+          if (callbacks.getInstance) {
+            callbacks.getInstance(instance);
+          }
+          break;
+        case RongIMLib.ConnectionStatus.CONNECTING:
+        case 1:
+          console.log('连接中');
+          data.code = 1;
+          data.message = '连接中';
+          break;
 
-      case RongIMLib.ConnectionStatus.DISCONNECTED:
-      case 2:
-        data.code = 2;
-        data.message = '当前用户主动断开链接';
-        console.log('当前用户主动断开链接');
-        break;
+        case RongIMLib.ConnectionStatus.DISCONNECTED:
+        case 2:
+          data.code = 2;
+          data.message = '当前用户主动断开链接';
+          console.log('当前用户主动断开链接');
+          break;
 
-      case RongIMLib.ConnectionStatus.NETWORK_UNAVAILABLE:
-      case 3:
-        data.code = 3;
-        data.message = '网络不可用';
-        console.log('网络不可用');
-        break;
+        case RongIMLib.ConnectionStatus.NETWORK_UNAVAILABLE:
+        case 3:
+          data.code = 3;
+          data.message = '网络不可用';
+          console.log('网络不可用');
+          break;
 
-      case RongIMLib.ConnectionStatus.CONNECTION_CLOSED:
-      case 4:
-        data.code = 4;
-        data.message = '未知原因，连接关闭';
-        console.log('未知原因，连接关闭');
-        break;
+        case RongIMLib.ConnectionStatus.CONNECTION_CLOSED:
+        case 4:
+          data.code = 4;
+          data.message = '未知原因，连接关闭';
+          console.log('未知原因，连接关闭');
+          break;
 
-      case RongIMLib.ConnectionStatus.KICKED_OFFLINE_BY_OTHER_CLIENT:
-      case 6:
-        data.code = 6;
-        data.message = '用户账户在其他设备登录，本机被踢掉线';
-        console.log('用户账户在其他设备登录，本机被踢掉线');
-        break;
+        case RongIMLib.ConnectionStatus.KICKED_OFFLINE_BY_OTHER_CLIENT:
+        case 6:
+          data.code = 6;
+          data.message = '用户账户在其他设备登录，本机被踢掉线';
+          console.log('用户账户在其他设备登录，本机被踢掉线');
+          break;
 
-      case RongIMLib.ConnectionStatus.DOMAIN_INCORRECT:
-      case 12:
-        data.code = 6;
-        data.message = '当前运行域名错误，请检查安全域名配置';
-        console.log('当前运行域名错误，请检查安全域名配置');
-        break;
-      default:
+        case RongIMLib.ConnectionStatus.DOMAIN_INCORRECT:
+        case 12:
+          data.code = 6;
+          data.message = '当前运行域名错误，请检查安全域名配置';
+          console.log('当前运行域名错误，请检查安全域名配置');
+          break;
+        default:
       }
       callbacks.connectionStatusListener(data);
     },
@@ -84,20 +85,20 @@ export const setOnReceiveMessageListener = (callbacks) => {
     onReceived(message) {
       // 判断消息类型
       switch (message.messageType) {
-      case RongIMClient.MessageType.TextMessage:
+        case RongIMClient.MessageType.TextMessage:
         // message.content.content => 消息内容
-        break;
-      case RongIMClient.MessageType.ImageMessage:
+          break;
+        case RongIMClient.MessageType.ImageMessage:
         // message.content.content => 图片缩略图 base64。
         // message.content.imageUri => 原图 URL。
-        break;
-      case RongIMClient.MessageType.PersonMessage:
+          break;
+        case RongIMClient.MessageType.PersonMessage:
         // 自定义消息
-        break;
-      case RongIMClient.MessageType.UnknownMessage:
+          break;
+        case RongIMClient.MessageType.UnknownMessage:
         // do something
-        break;
-      default:
+          break;
+        default:
         // do something...
       }
       if (callbacks.receiveNewMessage) {
@@ -127,19 +128,19 @@ export const connect = (params, callbacks) => {
       console.log(errorCode);
       let message;
       switch (errorCode) {
-      case RongIMLib.ErrorCode.TIMEOUT:
-        message = '服务器连接超时';
-        break;
-      case RongIMLib.ConnectionState.UNACCEPTABLE_PAROTOCOL_VERSION:
-        message = '不可接受的协议版本';
-        break;
-      case RongIMLib.ConnectionState.IDENTIFIER_REJECTED:
-        message = 'appkey不正确';
-        break;
-      case RongIMLib.ConnectionState.SERVER_UNAVAILABLE:
-        message = '消息服务暂时不可用';
-        break;
-      default:
+        case RongIMLib.ErrorCode.TIMEOUT:
+          message = '服务器连接超时';
+          break;
+        case RongIMLib.ConnectionState.UNACCEPTABLE_PAROTOCOL_VERSION:
+          message = '不可接受的协议版本';
+          break;
+        case RongIMLib.ConnectionState.IDENTIFIER_REJECTED:
+          message = 'appkey不正确';
+          break;
+        case RongIMLib.ConnectionState.SERVER_UNAVAILABLE:
+          message = '消息服务暂时不可用';
+          break;
+        default:
       }
       callbacks.onError(message);
     },
@@ -163,7 +164,6 @@ export const init = (params, callbacks) => {
 
   // 开始链接融云
   connect(params, callbacks);
-  instance = RongIMClient.getInstance();
 };
 
 /**
@@ -181,7 +181,6 @@ export const start = ({
     token,
     userId,
   };
-
   init(params, callbacks);
   console.log('初始化 应用');
 };
@@ -193,7 +192,7 @@ export const disconnect = () => {
   /*
   文档：http://www.rongcloud.cn/docs/api/js/RongIMClient.html
   */
-  instance.disconnect();
+  RongIMClient.getInstance().disconnect();
   console.log('断开链接');
 };
 
@@ -218,22 +217,22 @@ export const reconnect = ({ success, error }) => {
     onError(errorCode) {
       let info = '';
       switch (errorCode) {
-      case RongIMLib.ErrorCode.TIMEOUT:
-        info = '超时';
-        break;
-      case RongIMLib.ErrorCode.UNKNOWN_ERROR:
-        info = '未知错误';
-        break;
-      case RongIMLib.ErrorCode.UNACCEPTABLE_PROTOCOL_VERSION:
-        info = '不可接受的协议版本';
-        break;
-      case RongIMLib.ErrorCode.IDENTIFIER_REJECTED:
-        info = 'appkey不正确';
-        break;
-      case RongIMLib.ErrorCode.SERVER_UNAVAILABLE:
-        info = '服务器不可用';
-        break;
-      default:
+        case RongIMLib.ErrorCode.TIMEOUT:
+          info = '超时';
+          break;
+        case RongIMLib.ErrorCode.UNKNOWN_ERROR:
+          info = '未知错误';
+          break;
+        case RongIMLib.ErrorCode.UNACCEPTABLE_PROTOCOL_VERSION:
+          info = '不可接受的协议版本';
+          break;
+        case RongIMLib.ErrorCode.IDENTIFIER_REJECTED:
+          info = 'appkey不正确';
+          break;
+        case RongIMLib.ErrorCode.SERVER_UNAVAILABLE:
+          info = '服务器不可用';
+          break;
+        default:
       }
       error(info);
       console.log(`重新链接失败，原因：${info}`);
@@ -263,25 +262,25 @@ export const sendMessage = ({
     onError(errorCode, message) {
       let info = '';
       switch (errorCode) {
-      case RongIMLib.ErrorCode.TIMEOUT:
-        info = '超时';
-        break;
-      case RongIMLib.ErrorCode.UNKNOWN:
-        info = '未知错误';
-        break;
-      case RongIMLib.ErrorCode.REJECTED_BY_BLACKLIST:
-        info = '在黑名单中，无法向对方发送消息';
-        break;
-      case RongIMLib.ErrorCode.NOT_IN_DISCUSSION:
-        info = '不在讨论组中';
-        break;
-      case RongIMLib.ErrorCode.NOT_IN_GROUP:
-        info = '不在群组中';
-        break;
-      case RongIMLib.ErrorCode.NOT_IN_CHATROOM:
-        info = '不在聊天室中';
-        break;
-      default:
+        case RongIMLib.ErrorCode.TIMEOUT:
+          info = '超时';
+          break;
+        case RongIMLib.ErrorCode.UNKNOWN:
+          info = '未知错误';
+          break;
+        case RongIMLib.ErrorCode.REJECTED_BY_BLACKLIST:
+          info = '在黑名单中，无法向对方发送消息';
+          break;
+        case RongIMLib.ErrorCode.NOT_IN_DISCUSSION:
+          info = '不在讨论组中';
+          break;
+        case RongIMLib.ErrorCode.NOT_IN_GROUP:
+          info = '不在群组中';
+          break;
+        case RongIMLib.ErrorCode.NOT_IN_CHATROOM:
+          info = '不在聊天室中';
+          break;
+        default:
       }
       if (error) {
         error({ info, message });

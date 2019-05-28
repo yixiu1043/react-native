@@ -3,6 +3,7 @@ package com.rn_hiapp;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import cn.rongcloud.imlib.react.RCIMLibPackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.reactcommunity.rnlocalize.RNLocalizePackage;
@@ -27,6 +28,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RCIMLibPackage(),
             new AsyncStoragePackage(),
             new VectorIconsPackage(),
             new RNLocalizePackage(),
