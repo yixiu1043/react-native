@@ -12,7 +12,7 @@ import {
   TouchableHighlight,
   StyleSheet,
 } from 'react-native';
-import ChatService from '@service/chat';
+import ChatService from '@Service/chat';
 
 const viewStyles = StyleSheet.create({
   container: {
@@ -40,14 +40,14 @@ const viewStyles = StyleSheet.create({
 @connect(state => ({
   //
 }), {
-  setModalVisibleStatus,
-  fetchUserInfo,
-})
+    setModalVisibleStatus,
+    fetchUserInfo,
+  })
 
 class HomeScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     const { params = {} } = navigation.state;
-    const onPressRightButtonFunc = params.openPublisher || function () {};
+    const onPressRightButtonFunc = params.openPublisher || function () { };
     return {
       ...config.defaultNavigation,
       title: t('global.home'),
@@ -85,7 +85,7 @@ class HomeScreen extends React.Component {
   goChatRoom = (id) => {
     const { navigation } = this.props;
     navigation.navigate('Chatroom');
-    ChatService.joinChatRoom(id);
+    // ChatService.joinChatRoom(id);
   }
 
   openPublisher() {

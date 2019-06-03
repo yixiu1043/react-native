@@ -3,9 +3,9 @@ import {
   Text, View, TextInput, StyleSheet, TouchableOpacity,
 } from 'react-native';
 import config from '@Config';
-import Storage from '@service/storage';
+import Storage from '@Utils/storage';
 import styles from '@Styles';
-import ChatService from '@service/chat';
+import ChatService from '@Service/chat';
 
 const viewStyles = StyleSheet.create({
   container: {

@@ -6,6 +6,7 @@ import Modals from '@Modals'
 import { Provider } from 'react-redux'
 import { setI18nConfig } from '@Localize'
 import * as RNLocalize from 'react-native-localize'
+import ChatService from '@Service/chat'
 
 import {
   SafeAreaView,
@@ -31,6 +32,8 @@ export default class App extends React.Component {
       .catch(error => {
         console.error(error)
       })
+    // 启动融云服务
+    // ChatService.start();
   }
 
   componentWillUnmount() {

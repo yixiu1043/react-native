@@ -16,22 +16,9 @@ server.use((req, res, next) => {
   next();
 });
 
-// 3. 访问服务器(get或者post)
-// 参数一: 请求根路径
-// 3.1 get请求
-server.get('/', (request, response) => {
-  // console.log(request)
-  response.send('get请求成功');
-});
-
-// 3.2 post请求
-server.post('/', (request, response) => {
-  response.send('post请求成功');
-});
-
 server.get('/user/token', (req, res) => {
-  const userId = req.query.userId ? req.query.userId : '';
-  const name = req.query.name ? req.query.name : '';
+  const userId = req.query.userId || '';
+  const name = req.query.name || '';
   const portraitUri = 'https://www.thetupian.com/thumbs/Jwj13kKSEQigrsDzV-JRQfZt3ebaj1xk1FW7_Ke9Xr9jrTXpsbWBGIEVok8UyB0kJOXDfmNMvU0dWGVx-8CfiA.jpg';
 
   request.post({
@@ -49,9 +36,9 @@ server.get('/user/token', (req, res) => {
       'Content-Type': 'application/x-www-form-urlencoded',
     },
   },
-  (err, response, body) => {
-    res.json(JSON.parse(body));
-  });
+    (err, response, body) => {
+      res.json(JSON.parse(body));
+    });
 });
 
 server.listen(5050);
