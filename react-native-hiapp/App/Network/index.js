@@ -1,4 +1,3 @@
-import conifg from '@Config';
 
 function _buildQuery(obj) {
   const _ = encodeURIComponent;
@@ -6,9 +5,6 @@ function _buildQuery(obj) {
 }
 
 class Req {
-  constructor() {
-    this.baseUrl = conifg.prodBaseUrl;
-  }
 
   _httpDone(res) {
     if (!res.err_code) {
@@ -24,7 +20,7 @@ class Req {
   fetch({
     url, query, data, headers, method = 'GET',
   }) {
-    url = this.baseUrl + url;
+    console.log('OUTPUT: Req -> url', url);
     if (query) {
       url += `?${_buildQuery(query)}`;
     }

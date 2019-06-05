@@ -3,8 +3,7 @@ import connect from 'redux-connect-decorator';
 import config from '@Config';
 import styles from '@Styles';
 import t from '@Localize';
-import HeaderButton from '@Components/HeaderButton';
-import { fetchUserInfo, setModalVisibleStatus } from '@Store/Actions';
+import { fetchChatroomList } from '@Store/Actions';
 import {
   View,
   Text,
@@ -37,49 +36,28 @@ const viewStyles = StyleSheet.create({
   },
 });
 
-@connect(state => ({
-  //
-}), {
-    setModalVisibleStatus,
-    fetchUserInfo,
-  })
+@connect(
+  state => {
+    return {
+      chatList: state.home.chatList
+    }
+  },
+  {
+    fetchChatroomList,
+  }
+)
 
 class HomeScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
-    const { params = {} } = navigation.state;
-    const onPressRightButtonFunc = params.openPublisher || function () { };
     return {
       ...config.defaultNavigation,
       title: t('global.home'),
-      headerRight: (
-        <HeaderButton
-          isIcon
-          text="feedback"
-          onPressButton={onPressRightButtonFunc}
-        />
-      ),
     };
   }
 
-  state = {
-    chatList: [],
-  }
-
-  componentWillMount() {
-    const { navigation } = this.props;
-    navigation.setParams({ openPublisher: () => this.openPublisher() });
-  }
-
   componentDidMount() {
-    const { fetchUserInfo } = this.props;
-    fetchUserInfo();
-    this.getChatRoomList();
-  }
-
-  getChatRoomList = () => {
-    fetch('http://jsonplaceholder.typicode.com/photos?_limit=9')
-      .then(res => res.json())
-      .then(json => this.setState({ chatList: json }));
+    const { fetchChatroomList } = this.props;
+    fetchChatroomList();
   }
 
   goChatRoom = (id) => {
@@ -88,17 +66,8 @@ class HomeScreen extends React.Component {
     // ChatService.joinChatRoom(id);
   }
 
-  openPublisher() {
-    const { setModalVisibleStatus } = this.props;
-    setModalVisibleStatus({
-      name: 'publisher',
-      status: true,
-    });
-  }
-
-
   render() {
-    const { chatList } = this.state;
+    const { chatList } = this.props;
     return (
       <View style={viewStyles.container}>
         <View style={viewStyles.chatRoomWrapper}>

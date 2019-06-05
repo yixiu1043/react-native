@@ -4,8 +4,10 @@ const Skin = {
 };
 
 const App = {
-  devBaseUrl: 'https://raw.githubusercontent.com/BelinChung/api-mock/master/HiApp',
-  prodBaseUrl: 'https://raw.githubusercontent.com/BelinChung/api-mock/master/HiApp',
+  imUrl: 'http://localhost:5050',
+  domain: 'https://jsonplaceholder.typicode.com',
+  // devBaseUrl: 'https://raw.githubusercontent.com/BelinChung/api-mock/master/HiApp',
+  // prodBaseUrl: 'https://raw.githubusercontent.com/BelinChung/api-mock/master/HiApp',
   defaultNavigation: {
     headerStyle: {
       backgroundColor: Skin.mainColor,

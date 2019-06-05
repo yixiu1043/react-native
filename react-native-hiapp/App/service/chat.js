@@ -3,12 +3,14 @@ import Storage from '@Utils/storage';
 
 const APPKEY = 'kj7swf8ok3m02';
 const TOKEN = Storage.get('token');
+console.log('OUTPUT: TOKEN', TOKEN);
 
 export default class ChatService {
   /**
    * 链接融云服务
    */
   static start = () => {
+    console.log('OUTPUT: ChatService -> staticstart -> start');
     IMClient.init(APPKEY);
     IMClient.connect(
       TOKEN,

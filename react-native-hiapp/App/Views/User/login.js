@@ -6,6 +6,7 @@ import config from '@Config';
 import Storage from '@Utils/storage';
 import styles from '@Styles';
 import ChatService from '@Service/chat';
+import { fetchUserToken } from '@Store/Actions'
 
 const viewStyles = StyleSheet.create({
   container: {
@@ -38,6 +39,16 @@ const viewStyles = StyleSheet.create({
   },
 });
 
+@connect(
+  state => {
+    return {
+      token: state.app.token
+    }
+  },
+  {
+    fetchUserToken,
+  }
+)
 export default class login extends PureComponent {
   static navigationOptions = {
     header: null,
@@ -53,20 +64,22 @@ export default class login extends PureComponent {
   }
 
   login = () => {
+    console.log('OUTPUT: login -> login -> this.props', this.props);
     const { username, password } = this.state;
-    const { navigation } = this.props;
-    fetch(`http://localhost:5050/user/token?userId=${username}&name=${password}`)
-      .then(res => res.text())
-      .then((res) => {
-        const { token } = JSON.parse(res);
-        Storage.set('token', token);
-        Storage.set('userId', username);
-        ChatService.rongCloudStart(token, username);
-        navigation.navigate('Home');
-      });
+    const { navigation, fetchUserToken } = this.props;
+    // fetchUserToken(username, password)
+    //   .then(() => {
+    //     const { token } = this.props;
+    //     console.log('OUTPUT: login -> login -> token', token);
+    //     // Storage.save('token', token);
+    //     // Storage.save('userId', username);
+    //     // ChatService.start(token, username);
+    //     navigation.navigate('Home');
+    //   })
   }
 
   render() {
+    console.log('OUTPUT: login -> login -> this.props', this.props);
     return (
       <View style={viewStyles.container}>
         <View style={viewStyles.title}>
