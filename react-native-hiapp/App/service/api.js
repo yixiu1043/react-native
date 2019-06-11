@@ -6,5 +6,4 @@ export default class Api {
 
   // 获取融云token
   static imToken = `${conifg.imUrl}/user/token`
-
 }

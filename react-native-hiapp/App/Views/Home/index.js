@@ -37,23 +37,18 @@ const viewStyles = StyleSheet.create({
 });
 
 @connect(
-  state => {
-    return {
+  (state) => ({
       chatList: state.home.chatList
-    }
-  },
+    }),
   {
     fetchChatroomList,
-  }
+  },
 )
-
 class HomeScreen extends React.Component {
-  static navigationOptions = ({ navigation }) => {
-    return {
+  static navigationOptions = ({ navigation }) => ({
       ...config.defaultNavigation,
       title: t('global.home'),
-    };
-  }
+    })
 
   componentDidMount() {
     const { fetchChatroomList } = this.props;

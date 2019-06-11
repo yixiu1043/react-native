@@ -5,7 +5,6 @@ function _buildQuery(obj) {
 }
 
 class Req {
-
   _httpDone(res) {
     if (!res.err_code) {
       return res;
@@ -20,7 +19,6 @@ class Req {
   fetch({
     url, query, data, headers, method = 'GET',
   }) {
-    console.log('OUTPUT: Req -> url', url);
     if (query) {
       url += `?${_buildQuery(query)}`;
     }

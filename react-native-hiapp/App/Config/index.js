@@ -4,7 +4,8 @@ const Skin = {
 };
 
 const App = {
-  imUrl: 'http://localhost:5050',
+  APPKEY: 'kj7swf8ok3m02',
+  imUrl: 'https://wxchat2.mt204.com',
   domain: 'https://jsonplaceholder.typicode.com',
   // devBaseUrl: 'https://raw.githubusercontent.com/BelinChung/api-mock/master/HiApp',
   // prodBaseUrl: 'https://raw.githubusercontent.com/BelinChung/api-mock/master/HiApp',
