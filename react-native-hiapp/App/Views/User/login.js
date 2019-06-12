@@ -1,13 +1,12 @@
 import React, { PureComponent } from 'react';
 import connect from 'redux-connect-decorator';
-import {
-  Text, View, TextInput, StyleSheet, TouchableOpacity,
-} from 'react-native';
-import config from '@Config';
 import Storage from '@Utils/storage';
 import styles from '@Styles';
 import ChatService from '@Service/chat';
 import { fetchUserToken } from '@Store/Actions';
+import { Modal } from '@Service/helper';
+import { Input, Button, Text } from 'react-native-elements';
+import { View, StyleSheet } from 'react-native';
 
 const viewStyles = StyleSheet.create({
   container: {
@@ -15,28 +14,8 @@ const viewStyles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 10,
   },
-  input: {
-    height: 30,
-    borderBottomColor: 'gray',
-    borderBottomWidth: 1,
-    marginTop: 10,
-    paddingLeft: 10,
-  },
-  button: {
-    alignItems: 'center',
-    height: 30,
-    justifyContent: 'center',
-    backgroundColor: config.mainColor,
-    color: config.viewsBackgroundColor,
-    marginTop: 30,
-    borderColor: config.mainColor,
-    borderWidth: 1,
-  },
   title: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 20,
-    fontSize: 25,
+    textAlign: 'center',
   },
 });
 
@@ -56,6 +35,7 @@ class login extends PureComponent {
   state = {
     username: '',
     password: '',
+    loading: false,
   };
 
   onChangeText = (name, text) => {
@@ -65,8 +45,14 @@ class login extends PureComponent {
   login = () => {
     const { username, password } = this.state;
     const { navigation, getUserToken } = this.props;
-    getUserToken(username, password)
+    if (!username || !password) {
+      Modal.message('用户名密码不能为空哦!');
+      return false;
+    }
+    this.setState({ loading: true });
+    return getUserToken(username, password)
       .then((token) => {
+        this.setState({ loading: false });
         Storage.save('token', token);
         Storage.save('userId', username);
         ChatService.start(token);
@@ -75,28 +61,29 @@ class login extends PureComponent {
   }
 
   render() {
+    const { loading } = this.state;
     return (
       <View style={viewStyles.container}>
-        <View style={viewStyles.title}>
-          <Text>LOGIN</Text>
-        </View>
-        <TextInput
-          style={viewStyles.input}
+        <Text h3 style={viewStyles.title}>LOGIN</Text>
+        <Input
           placeholder="用户名"
+          leftIcon={{ type: 'font-awesome', name: 'user' }}
+          errorStyle={{ color: 'red' }}
+          // errorMessage="ENTER A VALID ERROR HERE"
           onChangeText={text => this.onChangeText('username', text)}
         />
-        <TextInput
-          style={viewStyles.input}
+        <Input
           placeholder="密码"
-          secureTextEntry
+          leftIcon={{ type: 'font-awesome', name: 'lock' }}
+          errorStyle={{ color: 'red' }}
+          // errorMessage="ENTER A VALID ERROR HERE"
           onChangeText={text => this.onChangeText('password', text)}
         />
-        <TouchableOpacity
-          style={viewStyles.button}
+        <Button
+          title="立即登陆"
+          loading={loading}
           onPress={this.login}
-        >
-          <Text>立即登陆</Text>
-        </TouchableOpacity>
+        />
       </View>
     );
   }
