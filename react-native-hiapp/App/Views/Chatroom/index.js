@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+import config from '@Config';
+import styles from '@Styles';
+import ChatService from '@Service/chat';
 import {
   Text, View, TextInput, StyleSheet, TouchableOpacity, Image,
 } from 'react-native';
-import config from '@Config';
-import styles from '@Styles';
+
 
 const viewStyles = StyleSheet.create({
   container: {
@@ -91,7 +93,10 @@ class Chatroom extends Component {
   }
 
   sendMessage = () => {
-    console.warn('11111');
+    const { navigation } = this.props;
+    const { params } = navigation.state;
+    const { text } = this.state;
+    ChatService.sendMessage(params.chatRoomId, { content: text });
   }
 
   render() {

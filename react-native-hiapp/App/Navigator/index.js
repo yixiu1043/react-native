@@ -1,6 +1,5 @@
 import React from 'react';
 import config from '@Config';
-import t from '@Localize';
 import { Text } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator, createAppContainer } from 'react-navigation';
 
@@ -40,16 +39,18 @@ const TabNavigator = createBottomTabNavigator(
     defaultNavigationOptions: ({ navigation }) => ({
       tabBarLabel: ({ focused, tintColor }) => {
         const { routeName } = navigation.state;
+        const style = { color: tintColor, fontSize: 12, textAlign: 'center' };
         switch (routeName) {
           case 'Home':
-            return <Text style={{ color: tintColor, fontSize: 12 }}>{t('global.home')}</Text>;
+            return <Text style={style}>主页</Text>;
           case 'Contacts':
-            return <Text style={{ color: tintColor, fontSize: 12 }}>{t('global.message')}</Text>;
+            return <Text style={style}>联系人</Text>;
           case 'Settings':
-            return <Text style={{ color: tintColor, fontSize: 12 }}>{t('global.settings')}</Text>;
+            return <Text style={style}>个人中心</Text>;
           default:
             break;
         }
+        return null;
       },
       tabBarIcon: ({ focused, tintColor }) => {
         const { routeName } = navigation.state;

@@ -1,11 +1,7 @@
 import * as IMClient from 'rongcloud-react-native-imlib';
 import Config from '@Config';
+import { Modal } from '@Service/helper';
 
-/**
- * 聊天室服务
- * @export
- * @class ChatService
- */
 export default class ChatService {
   /**
    * 链接融云服务
@@ -23,6 +19,7 @@ export default class ChatService {
    * @param appKey
    */
   static init = (appKey) => {
+    console.log(appKey);
     IMClient.init(appKey);
   }
 
@@ -31,6 +28,7 @@ export default class ChatService {
    * @param token
    */
   static connect = (token) => {
+    console.log(token);
     IMClient.connect(
       token,
       () => {
@@ -119,8 +117,10 @@ export default class ChatService {
     IMClient.joinChatRoom(chatRoomId, messageCount);
     try {
       await IMClient.joinExistChatRoom(chatRoomId, messageCount);
+      Modal.message('加入聊天室成功!');
     } catch (error) {
       if (error.code === IMClient.ErrorCode.CHATROOM_NOT_EXIST) {
+        Modal.message('聊天室不存在!');
         console.log('聊天室不存在');
       }
     }

@@ -1,47 +1,44 @@
-import React from 'react'
-import connect from 'redux-connect-decorator'
-import config from '@Config'
-import styles from '@Styles'
-import t from '@Localize'
-import ListTitle from '@Components/ListTitle'
-import { fetchContacts } from '@Store/Actions'
-import { getRemoteAvatar } from '@Utils'
+import React from 'react';
+import connect from 'redux-connect-decorator';
+import config from '@Config';
+import styles from '@Styles';
+import ListTitle from '@Components/ListTitle';
+import { fetchContacts } from '@Store/Actions';
+import { getRemoteAvatar } from '@Utils';
 
 import {
   View,
   FlatList,
-  StyleSheet
-} from 'react-native'
+  StyleSheet,
+} from 'react-native';
 
 import {
-  ListItem
-} from 'react-native-elements'
+  ListItem,
+} from 'react-native-elements';
 
 @connect(state => ({
-  contacts: state.contacts.contacts
+  contacts: state.contacts.contacts,
 }), {
-  fetchContacts
+  fetchContacts,
 })
 
-export default class HomeScreen extends React.Component {
-  static navigationOptions = _ => {
-    return {
+class HomeScreen extends React.Component {
+  static navigationOptions = (_) => ({
       ...config.defaultNavigation,
-      title: t('global.message'),
-    }
-  }
+      title: '联系人',
+    })
 
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-      refreshing: false
-    }
+      refreshing: false,
+    };
   }
 
   renderItem = ({ item }) => {
-    let listTitle = null
+    let listTitle = null;
     if (item.isFirstHeader) {
-      listTitle = <ListTitle title={item.header} />
+      listTitle = <ListTitle title={item.header} />;
     }
     return (
       <View>
@@ -55,23 +52,23 @@ export default class HomeScreen extends React.Component {
           leftAvatar={{ source: { uri: getRemoteAvatar(item.avatar) } }}
           title={item.nickname}
           subtitle={item.location}
-          onPress={_ => { this.props.navigation.navigate('Message', { user: item }) }}
+          onPress={(_) => { this.props.navigation.navigate('Message', { user: item }); }}
         />
       </View>
-    )
+    );
   }
 
   keyExtractor = (item, index) => index.toString()
 
   componentDidMount() {
     this.setState({
-      refreshing: true
-    })
-    this.props.fetchContacts().then(_ => {
+      refreshing: true,
+    });
+    this.props.fetchContacts().then((_) => {
       this.setState({
-        refreshing: false
-      })
-    })
+        refreshing: false,
+      });
+    });
   }
 
   render() {
@@ -82,23 +79,25 @@ export default class HomeScreen extends React.Component {
         keyExtractor={this.keyExtractor}
         data={this.props.contacts}
         renderItem={this.renderItem}
-        onRefresh={ () => null }
+        onRefresh={() => null}
         refreshing={this.state.refreshing}
       />
-    )
+    );
   }
 }
 
 const viewStyles = StyleSheet.create({
   container: {
-    ...styles.container
+    ...styles.container,
   },
   listItem: {
     paddingTop: 8,
-    paddingBottom: 8
+    paddingBottom: 8,
   },
   subtitleStyle: {
     fontSize: 14,
-    color: '#858585'
-  }
-})
+    color: '#858585',
+  },
+});
+
+export default HomeScreen;

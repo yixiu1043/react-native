@@ -2,8 +2,8 @@ import React from 'react';
 import connect from 'redux-connect-decorator';
 import config from '@Config';
 import styles from '@Styles';
-import t from '@Localize';
 import { fetchChatroomList } from '@Store/Actions';
+import ChatService from '@Service/chat';
 import {
   View,
   Text,
@@ -11,7 +11,6 @@ import {
   TouchableHighlight,
   StyleSheet,
 } from 'react-native';
-import ChatService from '@Service/chat';
 
 const viewStyles = StyleSheet.create({
   container: {
@@ -25,6 +24,7 @@ const viewStyles = StyleSheet.create({
     paddingTop: 10,
   },
   chatRoomItem: {
+    width: '33.33333%',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 10,
@@ -37,28 +37,29 @@ const viewStyles = StyleSheet.create({
 });
 
 @connect(
-  (state) => ({
-      chatList: state.home.chatList
-    }),
+  state => ({
+    chatList: state.home.chatList,
+  }),
   {
-    fetchChatroomList,
+    getchChatroomList: fetchChatroomList,
   },
 )
 class HomeScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
-      ...config.defaultNavigation,
-      title: t('global.home'),
-    })
+    ...config.defaultNavigation,
+    title: '主页',
+  })
 
   componentDidMount() {
-    const { fetchChatroomList } = this.props;
-    fetchChatroomList();
+    const { getchChatroomList } = this.props;
+    getchChatroomList();
   }
 
   goChatRoom = (id) => {
     const { navigation } = this.props;
-    navigation.navigate('Chatroom');
-    // ChatService.joinChatRoom(id);
+    const chatRoomId = String(id);
+    navigation.navigate('Chatroom', { chatRoomId });
+    ChatService.joinChatRoom(chatRoomId);
   }
 
   render() {

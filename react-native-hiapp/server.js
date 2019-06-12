@@ -1,4 +1,3 @@
-// 1. 导入express
 const express = require('express');
 const sha1 = require('sha1');
 const request = require('request');
@@ -36,9 +35,9 @@ server.get('/user/token', (req, res) => {
       'Content-Type': 'application/x-www-form-urlencoded',
     },
   },
-    (err, response, body) => {
-      res.json(JSON.parse(body));
-    });
+  (err, response, body) => {
+    res.json(JSON.parse(body));
+  });
 });
 
 server.listen(5050);
