@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import connect from 'redux-connect-decorator';
+import config from '@Config';
 import Storage from '@Utils/storage';
 import styles from '@Styles';
 import ChatService from '@Service/chat';
@@ -16,6 +17,10 @@ const viewStyles = StyleSheet.create({
   },
   title: {
     textAlign: 'center',
+  },
+  button: {
+    marginTop: 10,
+    backgroundColor: config.mainColor,
   },
 });
 
@@ -80,6 +85,7 @@ class login extends PureComponent {
           onChangeText={text => this.onChangeText('password', text)}
         />
         <Button
+          buttonStyle={viewStyles.button}
           title="立即登陆"
           loading={loading}
           onPress={this.login}

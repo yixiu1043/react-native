@@ -1,5 +1,5 @@
 const Skin = {
-  mainColor: '#ff9800',
+  mainColor: '#E14844',
   viewsBackgroundColor: '#eef0f3',
 };
 

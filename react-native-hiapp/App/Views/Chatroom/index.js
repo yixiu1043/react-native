@@ -3,9 +3,9 @@ import config from '@Config';
 import styles from '@Styles';
 import ChatService from '@Service/chat';
 import {
-  Text, View, TextInput, StyleSheet, TouchableOpacity, Image,
+  Text, View, StyleSheet, Image,
 } from 'react-native';
-
+import { Input, Button } from 'react-native-elements';
 
 const viewStyles = StyleSheet.create({
   container: {
@@ -58,22 +58,17 @@ const viewStyles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    height: 40,
-    padding: 10,
+    height: 55,
+    padding: 5,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
   },
   input: {
-    flex: 2,
-    height: 30,
+    flex: 1,
   },
   button: {
     width: 80,
-    height: 30,
-    alignItems: 'center',
-    justifyContent: 'center',
-    // backgroundColor: '#fff',
   },
 });
 
@@ -119,17 +114,17 @@ class Chatroom extends Component {
           </View>
         </View>
         <View style={viewStyles.bottom}>
-          <TextInput
-            style={viewStyles.input}
+          <Input
+            containerStyle={viewStyles.input}
             placeholder="请输入"
-            autoFocus
             onChangeText={text => this.onChangeText(text)}
           />
-          <TouchableOpacity style={viewStyles.button} onPress={this.sendMessage}>
-            <View>
-              <Text>发送</Text>
-            </View>
-          </TouchableOpacity>
+          <Button
+            buttonStyle={viewStyles.button}
+            type="clear"
+            title="发送"
+            onPress={this.sendMessage}
+          />
         </View>
       </View>
     );
