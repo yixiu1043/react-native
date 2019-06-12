@@ -4,7 +4,8 @@ import Storage from '@Utils/storage';
 import styles from '@Styles';
 import ChatService from '@Service/chat';
 import { fetchUserToken } from '@Store/Actions';
-import { Modal } from '@Service/helper';
+// import { Modal } from '@Service/helper';
+import Toast from '@Components/Toast';
 import { Input, Button, Text } from 'react-native-elements';
 import { View, StyleSheet } from 'react-native';
 
@@ -46,7 +47,7 @@ class login extends PureComponent {
     const { username, password } = this.state;
     const { navigation, getUserToken } = this.props;
     if (!username || !password) {
-      Modal.message('用户名密码不能为空哦!');
+      Toast.info('用户名密码不能为空哦!');
       return false;
     }
     this.setState({ loading: true });
