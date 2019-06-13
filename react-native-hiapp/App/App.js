@@ -1,21 +1,17 @@
 import React from 'react';
-// import Config from '@Config';
-import configStore from '@Store';
-import styles from '@Styles';
+// import configStore from '@Store';
+import Store from '@Store';
 import Modals from '@Modals';
 import { Provider } from 'react-redux';
-import {
-  StyleSheet,
-  StatusBar,
-} from 'react-native';
-
+import { StatusBar } from 'react-native';
 import AppContainer from './Navigator';
 
-const store = configStore();
+// const store = configStore();
+
 export default class App extends React.Component {
   render() {
     return (
-      <Provider store={store}>
+      <Provider store={Store}>
         <StatusBar
           barStyle="light-content"
         />

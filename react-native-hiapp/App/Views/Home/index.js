@@ -2,7 +2,7 @@ import React from 'react';
 import connect from 'redux-connect-decorator';
 import config from '@Config';
 import styles from '@Styles';
-import { fetchChatroomList } from '@Store/Actions';
+import { fetchChatRoomList } from '@Store/Actions';
 import ChatService from '@Service/chat';
 import {
   View,
@@ -38,10 +38,10 @@ const viewStyles = StyleSheet.create({
 
 @connect(
   state => ({
-    chatList: state.home.chatList,
+    chatRoomList: state.home.chatRoomList,
   }),
   {
-    getchChatroomList: fetchChatroomList,
+    getChatRoomList: fetchChatRoomList,
   },
 )
 class HomeScreen extends React.Component {
@@ -51,8 +51,8 @@ class HomeScreen extends React.Component {
   })
 
   componentDidMount() {
-    const { getchChatroomList } = this.props;
-    getchChatroomList();
+    const { getChatRoomList } = this.props;
+    getChatRoomList();
   }
 
   goChatRoom = (id) => {
@@ -63,12 +63,12 @@ class HomeScreen extends React.Component {
   }
 
   render() {
-    const { chatList } = this.props;
+    const { chatRoomList } = this.props;
     return (
       <View style={viewStyles.container}>
         <View style={viewStyles.chatRoomWrapper}>
           {
-            chatList.map(item => (
+            chatRoomList.map(item => (
               <View
                 key={item.id}
                 style={viewStyles.chatRoomItem}

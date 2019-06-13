@@ -34,9 +34,9 @@ class Toast {
 
   static message(type, msg, options) {
     const iconName = {
-      success: 'oneIcon|toastSuccess_s',
-      warning: 'oneIcon|toastWarning_s',
-      error: 'oneIcon|toastError_s',
+      success: 'check',
+      warning: 'exclamation',
+      error: 'times',
     };
     const toast = RootToast.show(
       Platform.OS === 'ios'

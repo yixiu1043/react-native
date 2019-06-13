@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, ActivityIndicator } from 'react-native';
-import { deviceInfo } from '@Utils';
+import { getDeviceInfo } from '@Utils';
 
 const styles = StyleSheet.create({
   maskStyle: {
     position: 'absolute',
     backgroundColor: 'rgba(0,0,0,0.3)',
-    width: deviceInfo.deviceWidth,
-    height: deviceInfo.deviceHeight,
+    width: getDeviceInfo().deviceWidth,
+    height: getDeviceInfo().deviceHeight,
     alignItems: 'center',
     justifyContent: 'center',
   },

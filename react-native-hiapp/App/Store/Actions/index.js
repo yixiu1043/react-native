@@ -1,3 +1,4 @@
-export * from './app'
-export * from './home'
-export * from './contacts'
+export * from './app';
+export * from './home';
+export * from './contacts';
+export * from './chat';

@@ -1,6 +1,10 @@
 import * as IMClient from 'rongcloud-react-native-imlib';
 import Config from '@Config';
-import { Modal } from '@Service/helper';
+import Toast from '@Components/Toast';
+import Store from '@Store';
+import Storage from '@Utils/storage';
+import { transformMessage, makeMessage } from '@Utils';
+import { addChatList } from '@Store/Actions';
 
 export default class ChatService {
   /**
@@ -63,8 +67,23 @@ export default class ChatService {
    * 添加接收消息监听器
    */
   static addReceiveMessageListener = () => {
-    IMClient.addReceiveMessageListener((message) => {
-      console.log(message);
+    IMClient.addReceiveMessageListener((res) => {
+      console.log(res);
+      const { message } = res;
+      Store.dispatch(addChatList(transformMessage(message)));
+      // message:
+      //   content: {extra: null, content: "aaa", objectName: "RC:TxtMsg"}
+      //   conversationType: 4
+      //   extra: null
+      //   messageDirection: 2
+      //   messageId: 2
+      //   messageUId: "BB9U-GPNT-7IIG-001I"
+      //   objectName: "RC:TxtMsg"
+      //   receivedTime: 1560409262799
+      //   senderUserId: "aaa"
+      //   sentStatus: 30
+      //   sentTime: 1560409119732
+      //   targetId: "2"
     });
   }
 
@@ -78,31 +97,26 @@ export default class ChatService {
   /**
    * 发送消息
    * @param targetId 根据会话类型的不同，可以是用户 ID、讨论组 ID、组群 ID 等
-   * @param content
+   * @param message
    * @param callback
-   * @param chatType
+   * @param chatType PRIVATE CHATROOM
    */
-  static sendMessage = (targetId, message, callback, chatType) => {
-    const { PRIVATE, CHATROOM } = IMClient.ConversationType;
-    // const conversationType = chatType ?
-    // IMClient.ConversationType.PRIVATE :
-    // IMClient.ConversationType.CHATROOM;
-    const conversationType = chatType ? PRIVATE : CHATROOM;
-    const content = { type: message.type || 'text', content: message.content };
+  static sendMessage = (targetId, message, callback, chatType = 'CHATROOM') => {
+    const conversationType = IMClient.ConversationType[chatType];
+    const content = { type: message.type || 'text', content: message.content, extra: '' };
     IMClient.sendMessage(
       { conversationType, targetId, content },
       {
         success(messageId) {
           console.log(`发送成功：${messageId}`);
+          Store.dispatch(addChatList(makeMessage(message.content)));
           if (callback) {
-            callback.success(messageId);
+            callback();
           }
         },
         error(errorCode) {
           console.log(`发送失败：${errorCode}`);
-          if (callback) {
-            callback.error(errorCode);
-          }
+          Toast.error('发送失败!');
         },
       },
     );
@@ -117,10 +131,10 @@ export default class ChatService {
     IMClient.joinChatRoom(chatRoomId, messageCount);
     try {
       await IMClient.joinExistChatRoom(chatRoomId, messageCount);
-      Modal.message('加入聊天室成功!');
+      Toast.success('加入聊天室成功!');
     } catch (error) {
       if (error.code === IMClient.ErrorCode.CHATROOM_NOT_EXIST) {
-        Modal.message('聊天室不存在!');
+        Toast.error('聊天室不存在!');
         console.log('聊天室不存在');
       }
     }
