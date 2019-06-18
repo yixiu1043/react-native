@@ -18,6 +18,7 @@ module.exports = {
           '@Modals': './App/Modals',
           '@Store': './App/Store',
           '@Service': './App/Service',
+          '@Middleware': './App/Middleware',
         },
       },
     ],

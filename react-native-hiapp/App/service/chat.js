@@ -2,7 +2,7 @@ import * as IMClient from 'rongcloud-react-native-imlib';
 import Config from '@Config';
 import Toast from '@Components/Toast';
 import Store from '@Store';
-import Storage from '@Utils/storage';
+// import Storage from '@Utils/storage';
 import { transformMessage, makeMessage } from '@Utils';
 import { addChatList } from '@Store/Actions';
 

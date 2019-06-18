@@ -86,20 +86,16 @@ export const transformMessage = (messageObj) => {
  * 制作消息到本地
  * @param {*} message
  */
-export const makeMessage = (message) => {
-  console.log('OUTPUT: makeMessage -> message', message);
-  return Storage.get('userId').then((userId) => {
-    console.log('OUTPUT: makeMessage -> res', userId);
-    const data = {
-      _id: Math.round(Math.random() * 1000000),
-      text: message,
-      createdAt: Date.now(),
-      user: {
-        _id: userId,
-        name: userId,
-        avatar: getRemoteAvatar(userId),
-      },
-    };
-    return data;
-  });
-};
+export const makeMessage = message => Storage.get('userId').then((userId) => {
+  const data = {
+    _id: Math.round(Math.random() * 1000000),
+    text: message,
+    createdAt: Date.now(),
+    user: {
+      _id: userId,
+      name: userId,
+      avatar: getRemoteAvatar(userId),
+    },
+  };
+  return data;
+});
