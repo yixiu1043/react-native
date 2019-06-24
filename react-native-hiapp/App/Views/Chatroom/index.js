@@ -1,44 +1,26 @@
-/* eslint-disable class-methods-use-this */
 import React from 'react';
 import config from '@Config';
 import connect from 'redux-connect-decorator';
 import ChatService from '@Service/chat';
 import Storage from '@Utils/storage';
 import { getRemoteAvatar } from '@Utils';
+import { Button } from 'react-native-elements';
+import { setChatList } from '@Store/Actions';
 import {
   GiftedChat,
-  Actions,
   Bubble,
   Send,
-  Footer,
   SystemMessage,
 } from 'react-native-gifted-chat';
 import {
-  StyleSheet,
-  Text,
-  View,
   SafeAreaView,
 } from 'react-native';
-import { Button } from 'react-native-elements';
-
-const styles = StyleSheet.create({
-  footerContainer: {
-    marginTop: 5,
-    marginLeft: 10,
-    marginRight: 10,
-    marginBottom: 10,
-  },
-  footerText: {
-    fontSize: 14,
-    color: '#aaa',
-  },
-});
 
 @connect(
   state => ({
     chatList: state.chat.chatList,
   }),
-  {},
+  { resetChatList: setChatList },
 )
 class Chatroom extends React.Component {
   static navigationOptions = ({ navigation }) => ({
@@ -51,7 +33,9 @@ class Chatroom extends React.Component {
     userInfo: {},
   };
 
-  componentWillMount() {
+  componentDidMount() {
+    const { resetChatList } = this.props;
+    resetChatList([]);
     Storage.get('userId').then((userId) => {
       const userInfo = {
         _id: userId,
@@ -67,7 +51,7 @@ class Chatroom extends React.Component {
     const { params } = navigation.state;
     const { text } = this.state;
     if (!text) {
-      return false;
+      return;
     }
     ChatService.sendMessage(
       params.chatRoomId,
@@ -79,7 +63,6 @@ class Chatroom extends React.Component {
     // this.setState(previousState => ({
     //   messages: GiftedChat.append(previousState.messages, messages),
     // }));
-    return null;
   }
 
   onChangeText = (text) => {
