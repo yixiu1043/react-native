@@ -4,7 +4,7 @@ import config from '@Config';
 import Storage from '@Utils/storage';
 import styles from '@Styles';
 import ChatService from '@Service/chat';
-import { fetchUserToken } from '@Store/Actions';
+import { fetchUserToken, setLogin } from '@Store/Actions';
 import Toast from '@Components/Toast';
 import { Input, Button, Text } from 'react-native-elements';
 import { View, StyleSheet } from 'react-native';
@@ -30,6 +30,7 @@ const viewStyles = StyleSheet.create({
   }),
   {
     getUserToken: fetchUserToken,
+    setLoginStatus: setLogin
   },
 )
 class login extends PureComponent {
@@ -49,7 +50,7 @@ class login extends PureComponent {
 
   login = () => {
     const { username, password } = this.state;
-    const { navigation, getUserToken } = this.props;
+    const { navigation, getUserToken, setLoginStatus } = this.props;
     if (!username || !password) {
       Toast.info('用户名密码不能为空哦!');
       return false;
@@ -58,6 +59,7 @@ class login extends PureComponent {
     return getUserToken(username, password)
       .then((token) => {
         this.setState({ loading: false });
+        setLoginStatus(true);
         Storage.save('token', token);
         Storage.save('userId', username);
         ChatService.start(token);

@@ -86,19 +86,16 @@ class Chatroom extends React.Component {
     this.setState({ text });
   }
 
-  renderBubble = (props) => {
-    console.log('OUTPUT: props', props);
-    return (
-      <Bubble
-        {...props}
-        wrapperStyle={{
-          left: {
-            backgroundColor: '#f0f0f0',
-          },
-        }}
-      />
-    );
-  }
+  renderBubble = props => (
+    <Bubble
+      {...props}
+      wrapperStyle={{
+        left: {
+          backgroundColor: '#f0f0f0',
+        },
+      }}
+    />
+  )
 
   renderSystemMessage = props => (
     <SystemMessage

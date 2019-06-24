@@ -1,6 +1,6 @@
 import { NavigationActions } from 'react-navigation';
-// import Storage from '@Utils/storage';
 import Store from '@Store';
+import Toast from '@Components/Toast';
 
 const getActiveRouteName = (navigationState) => {
   if (!navigationState) {
@@ -29,6 +29,7 @@ export const auth = (from, to, navigator) => {
   if (prevScreen !== currentScreen) {
     const { app } = Store.getState();
     if (!app.token) {
+      Toast.info('请先登录!');
       navigator.dispatch(
         NavigationActions.navigate({ routeName: 'Login' }),
       );

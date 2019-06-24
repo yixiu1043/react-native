@@ -6,6 +6,7 @@ import Api from '@Service/api';
 export const initUserInfo = createAction(types.INIT_USER_INFO);
 export const setModalVisibleStatus = createAction(types.SET_MODAL_VISIBLE_STATUS);
 export const setToken = createAction(types.SET_TOKEN);
+export const setLogin = createAction(types.SET_ISLOGIN);
 
 export function fetchUserInfo() {
   return (dispatch) => {

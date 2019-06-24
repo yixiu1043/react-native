@@ -79,7 +79,6 @@ class Chatroom extends Component {
   })
 
   state = {
-    msgList: {},
     text: '',
   }
 

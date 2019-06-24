@@ -27,10 +27,17 @@ export default handleActions(
         token: action.payload,
       };
     },
+    [types.SET_ISLOGIN](state, action) {
+      return {
+        ...state,
+        isLogin: action.payload,
+      };
+    },
   },
   {
     token: '',
     user: {},
+    isLogin: false,
     modalVisible: {
       publisher: false,
     },

@@ -7,80 +7,8 @@ import {
   View, StyleSheet, TouchableOpacity, Text,
 } from 'react-native';
 import { ListItem } from 'react-native-elements';
-import req from '@Network';
-
-@connect(state => ({
-  user: state.app.user,
-}))
-
-class SettingsScreen extends React.Component {
-  static navigationOptions = _ => ({
-    ...config.defaultNavigation,
-    title: '个人中心',
-  })
-
-  constructor() {
-    super();
-    this.menuList = [
-      {
-        title: '关于我们',
-        icon: 'about1',
-        color: '#fc3',
-        onPress() {
-          this.props.navigation.navigate('About');
-        },
-      },
-    ];
-  }
-
-  goLogin = () => {
-    this.props.navigation.navigate('Login');
-  }
-
-  render() {
-    return (
-      <View style={viewStyles.container}>
-        <ListItem
-          chevron
-          topDivider
-          bottomDivider
-          leftAvatar={{
-            size: 65,
-            source: {
-              uri: this.props.user.avatar_url,
-            },
-          }}
-          title={this.props.user.nick_name}
-          titleStyle={{ fontSize: 23 }}
-          subtitle={`当前位置: ${this.props.user.location}`}
-          subtitleStyle={{ fontSize: 16, color: '#858585' }}
-          onPress={(_) => { this.props.navigation.navigate('Profile'); }}
-        />
-        {
-          this.menuList.map((item, i) => (
-            <View style={viewStyles.list} key={i}>
-              <ListItem
-                containerStyle={viewStyles.listItem}
-                chevron
-                topDivider
-                bottomDivider
-                title={item.title}
-                onPress={item.onPress.bind(this)}
-                leftIcon={<Icon style={{ marginTop: 4 }} name={item.icon} color={item.color} />}
-              />
-            </View>
-          ))
-        }
-        <TouchableOpacity
-          style={viewStyles.button}
-          onPress={this.goLogin}
-        >
-          <Text>登陆</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  }
-}
+import Storage from '@Utils/storage';
+import { getRemoteAvatar } from '@Utils';
 
 const viewStyles = StyleSheet.create({
   container: {
@@ -103,4 +31,91 @@ const viewStyles = StyleSheet.create({
     marginHorizontal: 10,
   },
 });
+
+@connect(state => ({
+  user: state.app.user,
+  isLogin: state.app.isLogin,
+}))
+
+class SettingsScreen extends React.Component {
+  static navigationOptions = () => ({
+    ...config.defaultNavigation,
+    title: '个人中心',
+  })
+
+  state = {
+    menuList: [
+      {
+        title: '关于我们',
+        icon: 'about1',
+        color: '#fc3',
+        onPress() {
+          const { navigation } = this.props;
+          // this.props.navigation.navigate('About');
+          navigation.navigate('Message');
+        },
+      },
+    ],
+    userId: '',
+    avatar: '',
+  }
+
+
+  componentDidMount() {
+    Storage.get('userId').then((res) => {
+      this.setState({ userId: res });
+      this.setState({ avatar: getRemoteAvatar(res) });
+    });
+  }
+
+  goLogin = () => {
+    const { navigation } = this.props;
+    navigation.navigate('Login');
+  }
+
+  render() {
+    const { menuList, userId, avatar } = this.state;
+    const { navigation, isLogin } = this.props;
+    return (
+      <View style={viewStyles.container}>
+        <ListItem
+          chevron
+          topDivider
+          bottomDivider
+          leftAvatar={{
+            size: 65,
+            source: { uri: avatar },
+          }}
+          title={userId}
+          titleStyle={{ fontSize: 23 }}
+          subtitle="画一个姑娘陪着我"
+          subtitleStyle={{ fontSize: 16, color: '#858585' }}
+          onPress={() => { navigation.navigate('Profile'); }}
+        />
+        {
+          menuList.map((item, i) => (
+            <View style={viewStyles.list} key={i}>
+              <ListItem
+                containerStyle={viewStyles.listItem}
+                chevron
+                topDivider
+                bottomDivider
+                title={item.title}
+                onPress={item.onPress.bind(this)}
+                leftIcon={<Icon style={{ marginTop: 4 }} name={item.icon} color={item.color} />}
+              />
+            </View>
+          ))
+        }
+        <TouchableOpacity
+          style={[viewStyles.button, { display: isLogin ? 'none' : 'flex' }]}
+          onPress={this.goLogin}
+        >
+          <Text>登陆</Text>
+        </TouchableOpacity>
+      </View >
+    );
+  }
+}
+
 export default SettingsScreen;
