@@ -1,10 +1,8 @@
 import React, { PureComponent } from 'react';
 import connect from 'redux-connect-decorator';
 import config from '@Config';
-import Storage from '@Utils/storage';
 import styles from '@Styles';
-import ChatService from '@Service/chat';
-import { fetchUserToken, setLogin } from '@Store/Actions';
+import UserService from '@Service/user';
 import Toast from '@Components/Toast';
 import { Input, Button, Text } from 'react-native-elements';
 import { View, StyleSheet } from 'react-native';
@@ -28,10 +26,6 @@ const viewStyles = StyleSheet.create({
   state => ({
     token: state.app.token,
   }),
-  {
-    getUserToken: fetchUserToken,
-    setLoginStatus: setLogin
-  },
 )
 class login extends PureComponent {
   static navigationOptions = {
@@ -50,19 +44,15 @@ class login extends PureComponent {
 
   login = () => {
     const { username, password } = this.state;
-    const { navigation, getUserToken, setLoginStatus } = this.props;
+    const { navigation } = this.props;
     if (!username || !password) {
       Toast.info('用户名密码不能为空哦!');
-      return false;
+      return;
     }
     this.setState({ loading: true });
-    return getUserToken(username, password)
-      .then((token) => {
+    UserService.login(username, password)
+      .then(() => {
         this.setState({ loading: false });
-        setLoginStatus(true);
-        Storage.save('token', token);
-        Storage.save('userId', username);
-        ChatService.start(token);
         navigation.navigate('Home');
       });
   }

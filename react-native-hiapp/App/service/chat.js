@@ -2,7 +2,6 @@ import * as IMClient from 'rongcloud-react-native-imlib';
 import Config from '@Config';
 import Toast from '@Components/Toast';
 import Store from '@Store';
-// import Storage from '@Utils/storage';
 import { transformMessage, makeMessage } from '@Utils';
 import { addChatList } from '@Store/Actions';
 
@@ -23,7 +22,6 @@ export default class ChatService {
    * @param appKey
    */
   static init = (appKey) => {
-    console.log(appKey);
     IMClient.init(appKey);
   }
 
@@ -32,7 +30,6 @@ export default class ChatService {
    * @param token
    */
   static connect = (token) => {
-    console.log(token);
     IMClient.connect(
       token,
       () => {

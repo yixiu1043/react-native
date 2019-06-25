@@ -2,8 +2,7 @@ import React from 'react';
 import connect from 'redux-connect-decorator';
 import config from '@Config';
 import styles from '@Styles';
-import { fetchChatRoomList } from '@Store/Actions';
-import ChatService from '@Service/chat';
+import Api from '@Service/api';
 import {
   View,
   Text,
@@ -40,9 +39,6 @@ const viewStyles = StyleSheet.create({
   state => ({
     chatRoomList: state.home.chatRoomList,
   }),
-  {
-    getChatRoomList: fetchChatRoomList,
-  },
 )
 class HomeScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
@@ -51,15 +47,13 @@ class HomeScreen extends React.Component {
   })
 
   componentDidMount() {
-    const { getChatRoomList } = this.props;
-    getChatRoomList();
+    Api.fetchChatRoomList();
   }
 
   goChatRoom = (id) => {
     const { navigation } = this.props;
     const chatRoomId = String(id);
     navigation.navigate('Chatroom', { chatRoomId });
-    ChatService.joinChatRoom(chatRoomId);
   }
 
   render() {

@@ -35,6 +35,8 @@ class Chatroom extends React.Component {
 
   componentDidMount() {
     const { resetChatList } = this.props;
+    const { navigation } = this.props;
+    const { params } = navigation.state;
     resetChatList([]);
     Storage.get('userId').then((userId) => {
       const userInfo = {
@@ -44,6 +46,7 @@ class Chatroom extends React.Component {
       };
       this.setState({ userInfo });
     });
+    ChatService.joinChatRoom(params.chatRoomId);
   }
 
   onSend = () => {

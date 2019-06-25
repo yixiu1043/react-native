@@ -2,13 +2,12 @@ import React from 'react';
 import connect from 'redux-connect-decorator';
 import config from '@Config';
 import styles from '@Styles';
-import Icon from '@Components/Icon';
-import {
-  View, StyleSheet, TouchableOpacity, Text,
-} from 'react-native';
-import { ListItem } from 'react-native-elements';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import Storage from '@Utils/storage';
+import UserService from '@Service/user';
 import { getRemoteAvatar } from '@Utils';
+import { ListItem, Button } from 'react-native-elements';
+import { View, StyleSheet } from 'react-native';
 
 const viewStyles = StyleSheet.create({
   container: {
@@ -23,10 +22,7 @@ const viewStyles = StyleSheet.create({
     paddingBottom: 10,
   },
   button: {
-    alignItems: 'center',
-    padding: 10,
     backgroundColor: config.mainColor,
-    color: config.viewsBackgroundColor,
     marginTop: 30,
     marginHorizontal: 10,
   },
@@ -47,12 +43,12 @@ class SettingsScreen extends React.Component {
     menuList: [
       {
         title: '关于我们',
-        icon: 'about1',
+        icon: 'info-circle',
         color: '#fc3',
-        onPress() {
+        onPress: () => {
           const { navigation } = this.props;
-          // this.props.navigation.navigate('About');
-          navigation.navigate('Message');
+          navigation.navigate('About');
+          // navigation.navigate('Message');
         },
       },
     ],
@@ -73,19 +69,27 @@ class SettingsScreen extends React.Component {
     navigation.navigate('Login');
   }
 
+  logout = () => {
+    const { navigation } = this.props;
+    UserService.logout()
+      .then(() => {
+        navigation.navigate('Login');
+      });
+  }
+
   render() {
     const { menuList, userId, avatar } = this.state;
     const { navigation, isLogin } = this.props;
     return (
       <View style={viewStyles.container}>
         <ListItem
-          chevron
           topDivider
           bottomDivider
           leftAvatar={{
             size: 65,
             source: { uri: avatar },
           }}
+          rightIcon={<Icon name="angle-right" size={20} />}
           title={userId}
           titleStyle={{ fontSize: 23 }}
           subtitle="画一个姑娘陪着我"
@@ -97,23 +101,27 @@ class SettingsScreen extends React.Component {
             <View style={viewStyles.list} key={i}>
               <ListItem
                 containerStyle={viewStyles.listItem}
-                chevron
                 topDivider
                 bottomDivider
                 title={item.title}
-                onPress={item.onPress.bind(this)}
-                leftIcon={<Icon style={{ marginTop: 4 }} name={item.icon} color={item.color} />}
+                onPress={item.onPress}
+                leftIcon={<Icon name={item.icon} color={item.color} size={20} />}
+                rightIcon={<Icon name="angle-right" size={20} />}
               />
             </View>
           ))
         }
-        <TouchableOpacity
-          style={[viewStyles.button, { display: isLogin ? 'none' : 'flex' }]}
+        <Button
+          buttonStyle={[viewStyles.button, { display: isLogin ? 'none' : 'flex' }]}
+          title="立即登陆"
           onPress={this.goLogin}
-        >
-          <Text>登陆</Text>
-        </TouchableOpacity>
-      </View >
+        />
+        <Button
+          buttonStyle={[viewStyles.button, { display: isLogin ? 'flex' : 'none' }]}
+          title="退出登陆"
+          onPress={this.logout}
+        />
+      </View>
     );
   }
 }
