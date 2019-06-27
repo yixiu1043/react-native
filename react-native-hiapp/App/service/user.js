@@ -1,7 +1,8 @@
 import Store from '@Store';
 import Storage from '@Utils/storage';
 import ChatService from './chat';
-import { setLogin } from '@Store/Actions';
+import { setLogin, setUserInfo } from '@Store/Actions';
+import { getRemoteAvatar } from '@Utils';
 import Api from '@Service/api';
 
 export default class UserService {
@@ -15,6 +16,10 @@ export default class UserService {
     return Api.fetchUserToken(username, password)
       .then((token) => {
         Store.dispatch(setLogin(true));
+        Store.dispatch(setUserInfo({
+          userId: username,
+          avatar: getRemoteAvatar(username),
+        }));
         Storage.save('token', token);
         Storage.save('userId', username);
         ChatService.start(token);

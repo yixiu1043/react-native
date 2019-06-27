@@ -33,6 +33,12 @@ export default handleActions(
         isLogin: action.payload,
       };
     },
+    [types.SET_USER_INFO](state, action) {
+      return {
+        ...state,
+        user: action.payload,
+      };
+    },
   },
   {
     token: '',

@@ -6,6 +6,7 @@ export const initUserInfo = createAction(types.INIT_USER_INFO);
 export const setModalVisibleStatus = createAction(types.SET_MODAL_VISIBLE_STATUS);
 export const setToken = createAction(types.SET_TOKEN);
 export const setLogin = createAction(types.SET_ISLOGIN);
+export const setUserInfo = createAction(types.SET_USER_INFO);
 
 export function fetchUserInfo() {
   return (dispatch) => {

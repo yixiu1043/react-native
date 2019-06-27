@@ -3,9 +3,7 @@ import connect from 'redux-connect-decorator';
 import config from '@Config';
 import styles from '@Styles';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import Storage from '@Utils/storage';
 import UserService from '@Service/user';
-import { getRemoteAvatar } from '@Utils';
 import { ListItem, Button } from 'react-native-elements';
 import { View, StyleSheet } from 'react-native';
 
@@ -52,17 +50,9 @@ class SettingsScreen extends React.Component {
         },
       },
     ],
-    userId: '',
-    avatar: '',
   }
 
-
-  componentDidMount() {
-    Storage.get('userId').then((res) => {
-      this.setState({ userId: res });
-      this.setState({ avatar: getRemoteAvatar(res) });
-    });
-  }
+  componentDidMount() { }
 
   goLogin = () => {
     const { navigation } = this.props;
@@ -78,8 +68,10 @@ class SettingsScreen extends React.Component {
   }
 
   render() {
-    const { menuList, userId, avatar } = this.state;
-    const { navigation, isLogin } = this.props;
+    const { menuList } = this.state;
+    const {
+      navigation, isLogin, user,
+    } = this.props;
     return (
       <View style={viewStyles.container}>
         <ListItem
@@ -87,10 +79,10 @@ class SettingsScreen extends React.Component {
           bottomDivider
           leftAvatar={{
             size: 65,
-            source: { uri: avatar },
+            source: { uri: user.avatar },
           }}
           rightIcon={<Icon name="angle-right" size={20} />}
-          title={userId}
+          title={user.userId}
           titleStyle={{ fontSize: 23 }}
           subtitle="画一个姑娘陪着我"
           subtitleStyle={{ fontSize: 16, color: '#858585' }}
