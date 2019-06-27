@@ -11,7 +11,7 @@ class Loading {
     this.sibling = new RootSiblings(<LoadingView />);
   }
 
-  static hidden() {
+  static hide() {
     this.sibling.destroy();
   }
 }
