@@ -46,7 +46,6 @@ class SettingsScreen extends React.Component {
         onPress: () => {
           const { navigation } = this.props;
           navigation.navigate('About');
-          // navigation.navigate('Message');
         },
       },
     ],
